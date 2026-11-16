@@ -40,8 +40,8 @@ flowchart TB
     M -->|tool_calls| X["execute each tool<br/>inside the workspace jail"]
     X -->|"result or ERROR: ..."| C["append tool results<br/>(shorten old ones)"]
     C --> M
-    M -->|finish(summary)| D["summary + unified diff<br/>+ JSONL transcript"]
-    M -->|plain text| D
+    M -->|"finish(summary)"| D["summary + unified diff<br/>+ JSONL transcript"]
+    M -->|"plain text"| D
     X -->|"limits: max steps, repeated errors"| D
 ```
 
