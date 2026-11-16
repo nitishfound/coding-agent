@@ -19,10 +19,17 @@ def ws(tmp_path):
     return Workspace(tmp_path / "proj")
 
 
-@pytest.mark.parametrize("path", ["../outside.txt", "..\\outside.txt", "tests/../../outside.txt"])
+@pytest.mark.parametrize("path", ["../outside.txt", "tests/../../outside.txt"])
 def test_cannot_escape_the_workspace(ws, path):
     with pytest.raises(ToolError, match="outside the workspace"):
         ws.read_file(path)
+
+
+def test_backslash_paths_never_reach_outside_files(ws):
+    # On Windows "..\\" is a separator (-> outside the workspace); on Linux it is just an odd
+    # file name inside the workspace (-> not found). Either way the private file is never read.
+    with pytest.raises(ToolError):
+        ws.read_file("..\\outside.txt")
 
 
 def test_absolute_paths_outside_are_blocked(ws, tmp_path):
